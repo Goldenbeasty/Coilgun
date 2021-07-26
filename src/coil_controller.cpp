@@ -41,7 +41,7 @@ void setup() {
 
 }
 
-void loop() {
+void loop() { //Kinda dumb thing I am doing here, I still need to update the logic diagram and it is already so late -_-
   // put your main code here, to run repeatedly:
  if (digitalRead(sensorpin1) == HIGH and allowcoil1 == true){
    digitalWrite(mosfetpin1, HIGH);

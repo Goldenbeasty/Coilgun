@@ -39,9 +39,7 @@ volatile bool coilhasbeenused6 = true;
 
 
 
-void setup() {
-  // put your setup code here, to run once:
-  // pinMode(LED_BUILTIN, OUTPUT);
+void setup() {// just the setup to assign pinmodes // probably can be done more easly, but I don't care, just keep it simple
   pinMode(sensorpin1, INPUT);
   pinMode(sensorpin2, INPUT);
   pinMode(sensorpin3, INPUT);
@@ -56,11 +54,11 @@ void setup() {
   pinMode(mosfetpin5, OUTPUT);
   pinMode(mosfetpin6, OUTPUT);
 
-  attachInterrupt(0,setready, RISING); // 0 means pin 2
+  attachInterrupt(digitalPinToInterrupt(2),resetcoil,RISING); // for some unholy reason the interrupt name doesn't want to work in VS code
 
 }
 
-void setready(){
+void resetcoil(){ // Enables coils for fireing
   coilhasbeenused1 = false;
   coilhasbeenused2 = false;
   coilhasbeenused3 = false;
@@ -69,7 +67,7 @@ void setready(){
   coilhasbeenused6 = false;
 }
 
-void loop(){ // brobably goes into void loop and will change coilhasbeenused to false using interrupt on pin 2
+void loop(){
   if (allowcoil1 == true and digitalRead(sensorpin1) == HIGH and coilhasbeenused1 == false){
     digitalWrite(mosfetpin1, HIGH);
   }

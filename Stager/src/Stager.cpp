@@ -1,5 +1,7 @@
 #include <Arduino.h>
 
+void resetcoil();
+
 // By default hasfired bool will be set to true and only will be enabled right before activating coils 1 & 2
 
 //I'm just a friendly slime

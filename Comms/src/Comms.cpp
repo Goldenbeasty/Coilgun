@@ -1,5 +1,8 @@
 #include <Arduino.h>
 
+void trigger();
+void releasetrigger();
+
 const int safety = 4;
 const int ohterarduino = 5;
 const int volt = A7;

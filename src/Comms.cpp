@@ -8,7 +8,7 @@ float vout = 0.0;
 float vin = 0.0;
 float R1 = 100000.0; // resistance of R1 (100K) -see text!
 float R2 = 10000.0; // resistance of R2 (10K) - see text!
-int value = 0;
+int value = 0; // for calculating Vbat
 
 void setup(){
 attachInterrupt(digitalPinToInterrupt(2),trigger,RISING);

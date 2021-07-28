@@ -34,6 +34,16 @@ void releasetrigger(){
 }
 
 void loop(){
+
+    if (digitalRead(safety) == HIGH){
+        digitalWrite(RGB_green, LOW);
+        digitalWrite(RGB_red, HIGH);
+    }
+    else if (digitalRead(safety) == LOW){
+        digitalWrite(RGB_red, LOW);
+        digitalWrite(RGB_green, HIGH);
+    }
+
     // God's Blessing on this Wonderful World!
    // read the value at analog input
    value = analogRead(volt);

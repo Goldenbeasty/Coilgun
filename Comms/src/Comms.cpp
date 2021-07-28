@@ -7,6 +7,10 @@ const int safety = 4;
 const int ohterarduino = 5;
 const int volt = A7;
 
+const int RGB_red = 6;
+const int RGB_blue = 7;
+const int RGB_green = 8;
+
 float vout = 0.0;
 float vin = 0.0;
 float R1 = 100000.0; // resistance of R1 (100K) -see text!

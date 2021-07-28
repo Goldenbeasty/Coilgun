@@ -7,9 +7,9 @@ const int safety = 4;
 const int ohterarduino = 5;
 const int volt = A7;
 
-const int RGB_red = 6;
-const int RGB_blue = 7;
-const int RGB_green = 8;
+const int RGB_red = 9;
+const int RGB_blue = 10;
+const int RGB_green = 11;
 
 float vout = 0.0;
 float vin = 0.0;

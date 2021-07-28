@@ -8,8 +8,8 @@ const int ohterarduino = 5;
 const int volt = A7;
 
 const int RGB_red = 9;
-const int RGB_blue = 10;
-const int RGB_green = 11;
+const int RGB_green = 10;
+const int RGB_blue = 11;
 
 float vout = 0.0;
 float vin = 0.0;
@@ -22,6 +22,9 @@ attachInterrupt(digitalPinToInterrupt(2),trigger,RISING);
 attachInterrupt(digitalPinToInterrupt(2),releasetrigger,FALLING);
 pinMode(safety, INPUT);
 pinMode(volt, INPUT);
+pinMode(RGB_red, OUTPUT);
+pinMode(RGB_green, OUTPUT);
+pinMode(RGB_blue, OUTPUT);
 }
 
 void trigger(){

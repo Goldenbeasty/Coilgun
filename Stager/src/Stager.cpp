@@ -78,9 +78,9 @@ void resetcoil(){ // Enables coils for fireing
 void loop(){ // Currently takes around 60 microseconds to loop, probably can be optimized, if you want you can write it in assembely language if you wish so :)
   starttime = micros();
 
-  if (allowcoil1 == true){ // Checks if the coil is alloed to work, if the sensor is clear, if the bullet has already been passed
-    if (digitalRead(sensorpin1) == HIGH){
-      if (coilhasbeenused1 == false){
+  if (coilhasbeenused1 == false){ // Checks if the coil is alloed to work, if the sensor is clear, if the bullet has already been passed
+    if (allowcoil1 == true){
+      if (digitalRead(sensorpin1) == HIGH){
         digitalWrite(mosfetpin1, HIGH);
       }
     }
@@ -92,9 +92,9 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
     coilhasbeenused1 = true;
   }
   
-  if (allowcoil2 == true){ // Sane as coil 1
-    if (digitalRead(sensorpin2) == HIGH){
-      if (coilhasbeenused2 == false){
+  if (coilhasbeenused2 == false){ // Sane as coil 1
+    if (allowcoil2 == true){
+      if (digitalRead(sensorpin2) == HIGH){
         digitalWrite(mosfetpin2, HIGH);
       }
     }
@@ -105,10 +105,10 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
     coilhasbeenused2 = true;
   }
 
-  if (allowcoil3 == true){ // Checks if the coil is allowed to work, if the sensor is clear, if the bullet has passed it's coil and if the bullet has passed two coils prior
-    if (digitalRead(sensorpin3) == HIGH){
-      if (coilhasbeenused3 == false){
-        if (coilhasbeenused1 == true){
+  if (coilhasbeenused3 == false){ // Checks if the coil is allowed to work, if the sensor is clear, if the bullet has passed it's coil and if the bullet has passed two coils prior
+    if (coilhasbeenused1 == true){
+      if (allowcoil3 == true){
+        if (digitalRead(sensorpin3) == HIGH){
           digitalWrite(mosfetpin3,HIGH);
         }
       }
@@ -122,10 +122,10 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
     }
   }
   
-  if (allowcoil4 == true){ // Same as coil 3
-    if (digitalRead(sensorpin4) == HIGH){
-      if (coilhasbeenused4 == false){
-        if (coilhasbeenused2 == true){
+  if (coilhasbeenused4 == false){ // Same as coil 3
+    if (coilhasbeenused2 == true){
+      if (allowcoil4 == true){
+        if (digitalRead(sensorpin4) == HIGH){
           digitalWrite(mosfetpin4, HIGH);
         }
       }
@@ -139,10 +139,10 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
     }
   }
 
-  if (allowcoil5 == true){ // Same as coil 3
-    if (digitalRead(sensorpin5) == HIGH){
-      if (coilhasbeenused5 == false){
-        if (coilhasbeenused3 == true){
+  if (coilhasbeenused5 == false){ // Same as coil 3
+    if (coilhasbeenused3 == true){
+      if (allowcoil5 == true){
+        if (digitalRead(sensorpin5) == HIGH){
           digitalWrite(mosfetpin5, HIGH);
         }
       }
@@ -156,10 +156,10 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
     }
   }
 
-  if (allowcoil6 == true){ // Same as coil 3
-    if (digitalRead(sensorpin6) == HIGH){
-      if (coilhasbeenused6 == false){
-        if (coilhasbeenused4 == true){
+  if (coilhasbeenused6 == false){ // Same as coil 3
+    if (coilhasbeenused4 == true){
+      if (allowcoil6 == true){
+        if (digitalRead(sensorpin6) == HIGH){
           digitalWrite(mosfetpin6,HIGH);
         }
       }
@@ -179,3 +179,4 @@ Serial.println(micros() - starttime);
 // table main 60-64 microseconds
 // removing allowcoil under 1 microsecond less time spent per loop
 // 36 microsecons unoptimized lazy code -_- rlly?
+// 16 - 40 microseconds optimized lazy code

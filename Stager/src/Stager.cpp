@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-void resetcoil();
+void resetcoil(); // needs to be declared when using .cpp files in VS code, if you build this in Arduino IDE everithing above line 4 does not need to be included
 
 // By default hasfired bool will be set to true and only will be enabled right before activating coils 1 & 2
 
@@ -58,7 +58,7 @@ void setup() {// just the setup to assign pinmodes // probably can be done more 
   pinMode(mosfetpin5, OUTPUT);
   pinMode(mosfetpin6, OUTPUT);
 
-  attachInterrupt(digitalPinToInterrupt(2),resetcoil,RISING); // for some unholy reason the interrupt name doesn't want to work in VS code
+  attachInterrupt(digitalPinToInterrupt(2),resetcoil,RISING); // Interrupt from the other microcontroller
 
 }
 
@@ -71,8 +71,8 @@ void resetcoil(){ // Enables coils for fireing
   coilhasbeenused6 = false;
 }
 
-void loop(){
-  if (allowcoil1 == true and digitalRead(sensorpin1) == HIGH and coilhasbeenused1 == false){
+void loop(){ // Currently takes around 60 microseconds to loop, probably can be optimized, if you want you can write it in assembely language if you wish so :)
+  if (allowcoil1 == true and digitalRead(sensorpin1) == HIGH and coilhasbeenused1 == false){ // Checks if the coil is alloed to work, if the sensor is clear, if the bullet has already been passed
     digitalWrite(mosfetpin1, HIGH);
   }
   else{
@@ -80,7 +80,7 @@ void loop(){
     coilhasbeenused1 = true;
   }
   
-  if (allowcoil2 == true and digitalRead(sensorpin2) == HIGH and coilhasbeenused2 == false){
+  if (allowcoil2 == true and digitalRead(sensorpin2) == HIGH and coilhasbeenused2 == false){ // Sane as coil 1
     digitalWrite(mosfetpin2, HIGH);
   }
   else{
@@ -88,7 +88,7 @@ void loop(){
     coilhasbeenused2 = true;
   }
 
-  if (allowcoil3 == true and digitalRead(sensorpin3) == HIGH and coilhasbeenused3 == false and coilhasbeenused1 == true){
+  if (allowcoil3 == true and digitalRead(sensorpin3) == HIGH and coilhasbeenused3 == false and coilhasbeenused1 == true){ // Checks if the coil is allowed to work, if the sensor is clear, if the bullet has passed it's coil and if the bullet has passed two coils prior
     digitalWrite(mosfetpin3, HIGH);
   } 
   else{
@@ -98,7 +98,7 @@ void loop(){
     }
   }
   
-  if (allowcoil4 == true and digitalRead(sensorpin4) == HIGH and coilhasbeenused4 == false and coilhasbeenused2 == true){
+  if (allowcoil4 == true and digitalRead(sensorpin4) == HIGH and coilhasbeenused4 == false and coilhasbeenused2 == true){ // Same as coil 3
     digitalWrite(mosfetpin4, HIGH);
   }
   else{
@@ -108,7 +108,7 @@ void loop(){
     }
   }
 
-  if (allowcoil5 == true and digitalRead(sensorpin5) == HIGH and coilhasbeenused5 == false and coilhasbeenused3 == true){
+  if (allowcoil5 == true and digitalRead(sensorpin5) == HIGH and coilhasbeenused5 == false and coilhasbeenused3 == true){ // Same as coil 3
     digitalWrite(mosfetpin5,HIGH);
   }
   else{
@@ -118,7 +118,7 @@ void loop(){
     }
   }
 
-  if (allowcoil6 == true and digitalRead(sensorpin6) == HIGH and coilhasbeenused6 == false and coilhasbeenused4 == true){
+  if (allowcoil6 == true and digitalRead(sensorpin6) == HIGH and coilhasbeenused6 == false and coilhasbeenused4 == true){ // Same as coil 3
     digitalWrite(mosfetpin6, HIGH);
   }
   else{

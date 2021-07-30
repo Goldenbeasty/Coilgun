@@ -168,8 +168,3 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
 
 Serial.println(micros() - starttime);
 }
-
-// table main 60-64 microseconds
-// removing allowcoil under 1 microsecond less time spent per loop
-// 36 microsecons unoptimized lazy code -_- rlly?
-// 16 - 40 microseconds optimized lazy code

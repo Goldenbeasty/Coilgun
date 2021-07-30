@@ -29,17 +29,21 @@ float R1 = 100000.0; // resistance of R1 (100K) -see text!
 float R2 = 10000.0; // resistance of R2 (10K) - see text!
 int value = 0; // for calculating Vbat
 
+bool statusmessage = false;
+float timeofstatechange = 0;
+bool safetystate = true;
+
 void setup(){
-attachInterrupt(digitalPinToInterrupt(2),trigger,RISING);
-attachInterrupt(digitalPinToInterrupt(2),releasetrigger,FALLING);
-pinMode(safety, INPUT);
-pinMode(volt, INPUT);
-pinMode(RGB_red, OUTPUT);
-pinMode(RGB_green, OUTPUT);
-pinMode(RGB_blue, OUTPUT);
+    attachInterrupt(digitalPinToInterrupt(2),trigger,RISING);
+    attachInterrupt(digitalPinToInterrupt(2),releasetrigger,FALLING);
+    pinMode(safety, INPUT);
+    pinMode(volt, INPUT);
+    pinMode(RGB_red, OUTPUT);
+    pinMode(RGB_green, OUTPUT);
+    pinMode(RGB_blue, OUTPUT);
 }
 
-void trigger(){
+void trigger(){ // TODO Implement a way to show that trigger is pushed down on OLED
     if (digitalRead(safety) == HIGH){
         digitalWrite(ohterarduino,HIGH);
     }
@@ -53,24 +57,59 @@ void loop(){
     if (digitalRead(safety) == HIGH){
         digitalWrite(RGB_green, LOW);
         digitalWrite(RGB_red, HIGH);
+        if (safetystate == true){
+            timeofstatechange = millis();
+        }
+        if (millis() - timeofstatechange < 1000){
+            statusmessage = true;
+        }
+        else{
+            statusmessage = false;
+        }
+
+        safetystate = false;
     }
     else if (digitalRead(safety) == LOW){
         digitalWrite(RGB_red, LOW);
         digitalWrite(RGB_green, HIGH);
+        if (safetystate == false){
+            timeofstatechange = millis();
+        }
+        if (millis() - timeofstatechange < 1000){
+            statusmessage = true;
+        }
+        else{
+            statusmessage = false;
+        }
+
+        safetystate = true;
     }
 
     // God's Blessing on this Wonderful World!
-   // read the value at analog input
-   value = analogRead(volt);
-   vout = (value * 5.0) / 1024.0; // see text
-   vin = vout / (R2/(R1+R2)); 
-   if (vin<0.09) {
-   vin=0.0;//statement to quash undesired reading !
-   }
-    // TODO OLED control, Voltage monitoring
-    display.setTextSize(2);             // Draw 2X-scale text
-    display.setTextColor(SSD1306_WHITE);
-    display.setCursor(8,8);
-    display.println(vin);
-    display.display();
+
+    value = analogRead(volt); // read the value at analog input
+    vout = (value * 5.0) / 1024.0; // see text
+    vin = vout / (R2/(R1+R2)); 
+    if (vin<0.09) {
+    vin=0.0;//statement to quash undesired reading !
+    }
+    if (statusmessage == false){
+        // TODO OLED refine control, Voltage monitoring
+        display.setTextSize(2);             // Draw 2X-scale text
+        display.setTextColor(SSD1306_WHITE);
+        display.setCursor(8,8);
+        display.println(vin);
+        display.display();
+    }
+    else if (statusmessage == true){
+        if (digitalRead(safety) == HIGH){
+            display.println("S OFF");
+            display.display();
+        }
+        else if (digitalRead(safety) == LOW){
+            display.println("S ON");
+            display.display();
+        }
+    }
+    
 }

@@ -78,7 +78,7 @@ void resetcoil(){ // Enables coils for fireing
 void loop(){ // Currently takes around 60 microseconds to loop, probably can be optimized, if you want you can write it in assembely language if you wish so :)
   starttime = micros();
 
-  if (coilhasbeenused1 == false){ // Checks if the coil is alloed to work, if the sensor is clear, if the bullet has already been passed
+  if (coilhasbeenused1 == false){ // Checks if the coil is allowed to work, if the sensor is clear, if the bullet has already passed
     if (allowcoil1 == true){
       if (digitalRead(sensorpin1) == HIGH){
         digitalWrite(mosfetpin1, HIGH);
@@ -92,7 +92,7 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
     coilhasbeenused1 = true;
   }
   
-  if (coilhasbeenused2 == false){ // Sane as coil 1
+  if (coilhasbeenused2 == false){ // Same as coil 1
     if (allowcoil2 == true){
       if (digitalRead(sensorpin2) == HIGH){
         digitalWrite(mosfetpin2, HIGH);
@@ -118,7 +118,7 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
   else{
     digitalWrite(mosfetpin3, LOW);
     if (coilhasbeenused1 == true){
-    coilhasbeenused3 = true;
+      coilhasbeenused3 = true;
     }
   }
   

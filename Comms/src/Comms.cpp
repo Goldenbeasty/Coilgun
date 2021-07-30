@@ -103,11 +103,11 @@ void loop(){
     }
     else if (statusmessage == true){
         if (digitalRead(safety) == HIGH){
-            display.println("S OFF");
+            display.println("SAFETY OFF");
             display.display();
         }
         else if (digitalRead(safety) == LOW){
-            display.println("S ON");
+            display.println("SAFETY ON");
             display.display();
         }
     }

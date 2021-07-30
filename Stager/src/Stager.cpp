@@ -84,8 +84,6 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
         digitalWrite(mosfetpin1, HIGH);
       }
     }
-    
-    // digitalWrite(mosfetpin1, HIGH);
   }
   else{
     digitalWrite(mosfetpin1, LOW);
@@ -98,7 +96,6 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
         digitalWrite(mosfetpin2, HIGH);
       }
     }
-    // digitalWrite(mosfetpin2, HIGH);
   }
   else{
     digitalWrite(mosfetpin2, LOW);
@@ -113,7 +110,6 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
         }
       }
     }
-    // digitalWrite(mosfetpin3, HIGH);
   } 
   else{
     digitalWrite(mosfetpin3, LOW);
@@ -130,7 +126,6 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
         }
       }
     }
-    // digitalWrite(mosfetpin4, HIGH);
   }
   else{
     digitalWrite(mosfetpin4, LOW);
@@ -147,7 +142,6 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
         }
       }
     }
-    // digitalWrite(mosfetpin5,HIGH);
   }
   else{
     digitalWrite(mosfetpin5,LOW);
@@ -164,7 +158,6 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
         }
       }
     }
-    // digitalWrite(mosfetpin6, HIGH);
   }
   else{
     digitalWrite(mosfetpin6, LOW);

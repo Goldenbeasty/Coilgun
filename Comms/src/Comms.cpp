@@ -68,4 +68,9 @@ void loop(){
    vin=0.0;//statement to quash undesired reading !
    }
     // TODO OLED control, Voltage monitoring
+    display.setTextSize(2);             // Draw 2X-scale text
+    display.setTextColor(SSD1306_WHITE);
+    display.setCursor(8,8);
+    display.println(vin);
+    display.display();
 }

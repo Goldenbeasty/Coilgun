@@ -6,6 +6,8 @@ void resetcoil(); // needs to be declared when using .cpp files in VS code, if y
 
 //I'm just a friendly slime
 
+float starttime = 0;
+
 // Pins to sense the high signal of optical sensors
 const int sensorpin1 = 7; 
 const int sensorpin2 = 8;
@@ -58,6 +60,8 @@ void setup() {// just the setup to assign pinmodes // probably can be done more 
   pinMode(mosfetpin5, OUTPUT);
   pinMode(mosfetpin6, OUTPUT);
 
+  Serial.begin(9600);
+
   attachInterrupt(digitalPinToInterrupt(2),resetcoil,RISING); // Interrupt from the other microcontroller
 
 }
@@ -72,6 +76,8 @@ void resetcoil(){ // Enables coils for fireing
 }
 
 void loop(){ // Currently takes around 60 microseconds to loop, probably can be optimized, if you want you can write it in assembely language if you wish so :)
+  starttime = micros();
+
   if (allowcoil1 == true and digitalRead(sensorpin1) == HIGH and coilhasbeenused1 == false){ // Checks if the coil is alloed to work, if the sensor is clear, if the bullet has already been passed
     digitalWrite(mosfetpin1, HIGH);
   }
@@ -127,4 +133,9 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
       coilhasbeenused6 = true;
     }
   }
+
+Serial.println(micros() - starttime);
 }
+
+// table main 60-64 microseconds
+// removing allowcoil under 1 microsecond less time spent per loop

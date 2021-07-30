@@ -6,8 +6,6 @@ void resetcoil(); // needs to be declared when using .cpp files in VS code, if y
 
 //I'm just a friendly slime
 
-float starttime = 0;
-
 // Pins to sense the high signal of optical sensors
 const int sensorpin1 = 7; 
 const int sensorpin2 = 8;
@@ -40,11 +38,6 @@ volatile bool coilhasbeenused4 = true;
 volatile bool coilhasbeenused5 = true;
 volatile bool coilhasbeenused6 = true; 
 
-// const int firesignalpin = 2; // Pin to recive the shoot command // TODO currently unused
-
-
-
-
 void setup() {// just the setup to assign pinmodes // probably can be done more easly, but I don't care, just keep it simple
   pinMode(sensorpin1, INPUT);
   pinMode(sensorpin2, INPUT);
@@ -60,10 +53,7 @@ void setup() {// just the setup to assign pinmodes // probably can be done more 
   pinMode(mosfetpin5, OUTPUT);
   pinMode(mosfetpin6, OUTPUT);
 
-  Serial.begin(9600);
-
   attachInterrupt(digitalPinToInterrupt(2),resetcoil,RISING); // Interrupt from the other microcontroller
-
 }
 
 void resetcoil(){ // Enables coils for fireing
@@ -76,8 +66,6 @@ void resetcoil(){ // Enables coils for fireing
 }
 
 void loop(){ // Currently takes around 60 microseconds to loop, probably can be optimized, if you want you can write it in assembely language if you wish so :)
-  starttime = micros();
-
   if (coilhasbeenused1 == false){ // Checks if the coil is allowed to work, if the sensor is clear, if the bullet has already passed
     if (allowcoil1 == true){
       if (digitalRead(sensorpin1) == HIGH){
@@ -165,6 +153,4 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
       coilhasbeenused6 = true;
     }
   }
-
-Serial.println(micros() - starttime);
 }

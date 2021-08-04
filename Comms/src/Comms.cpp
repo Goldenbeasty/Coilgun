@@ -56,7 +56,6 @@ void releasetrigger(){
 }
 
 void loop(){
-
     if (digitalRead(safety) == HIGH){
         digitalWrite(RGB_green, LOW);
         digitalWrite(RGB_red, HIGH);
@@ -96,22 +95,24 @@ void loop(){
     if (vin<0.09) {
     vin=0.0;//statement to quash undesired reading !
     }
-    if (statusmessage == false){ // Checks for display priority
+    if (statusmessage == false){ // Checks for display priority  // Do I need to implement a framerate cap?
         // TODO OLED refine control, Voltage monitoring
+        if (safetystate == false){
+            display.drawRect(0,0,127,31,WHITE); // TODO Once I have the screen I will have to test out the functionality of this code // Note: round recangles exist as well 
+        }
         display.setTextSize(2);             // Draw 2X-scale text
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(8,8);
         display.println(vin);
-        display.display();
     }
     else if (statusmessage == true){ // Check if screen needs to display safety change
         if (digitalRead(safety) == HIGH){
             display.println("SAFETY OFF");
-            display.display();
         }
         else if (digitalRead(safety) == LOW){
             display.println("SAFETY ON");
-            display.display();
         }
     }
+    display.display();
+
 }

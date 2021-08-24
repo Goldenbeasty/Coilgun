@@ -110,7 +110,7 @@ void loop(){
         display.setTextSize(2);
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(0,13);
-        
+
         if (digitalRead(safety) == HIGH){
             display.println("SAFETY OFF");
         }

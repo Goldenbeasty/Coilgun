@@ -7,7 +7,7 @@
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 32 // OLED display height, in pixels
 
-#define OLED_RESET     4 // Reset pin # (or -1 if sharing Arduino reset pin)
+#define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 #define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
@@ -103,9 +103,9 @@ void loop(){
         if (safetystate == false){
             display.drawRect(0,0,127,31,WHITE); // TODO Once I have the screen I will have to test out the functionality of this code // Note: round recangles exist as well 
         }
-        display.setTextSize(3); // Draw 3X-scale text
+        display.setTextSize(4); // Draw 3X-scale text
         display.setTextColor(SSD1306_WHITE);
-        display.setCursor(8,8);
+        display.setCursor(2,2);
         display.println(vin);
     }
     else if (statusmessage == true){ // Check if screen needs to display safety change

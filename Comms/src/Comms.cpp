@@ -57,8 +57,6 @@ void releasetrigger(){
 }
 
 void loop(){
-    Serial.println("loop start");
-
     if (digitalRead(safety) == HIGH){
         digitalWrite(RGB_green, LOW);
         digitalWrite(RGB_red, HIGH);

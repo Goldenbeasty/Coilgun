@@ -110,7 +110,7 @@ void loop(){
     }
     else if (statusmessage == true){ // Check if screen needs to display safety change
         if (digitalRead(safety) == HIGH){
-            display.println("SAFETY OFF");
+            display.println("SAFETY OFF"); // BUG #2 This does not happen
         }
         else if (digitalRead(safety) == LOW){
             display.println("SAFETY ON");

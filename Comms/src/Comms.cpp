@@ -108,9 +108,15 @@ void loop(){
     }
     else if (statusmessage == true){ // Check if screen needs to display safety change
         if (digitalRead(safety) == HIGH){
-            display.println("SAFETY OFF"); // BUG #2 This does not happen
+            display.setTextSize(4); // Draw 3X-scale text
+            display.setTextColor(SSD1306_WHITE);
+            display.setCursor(2,2);
+            display.println("SAFETY OFF");
         }
         else if (digitalRead(safety) == LOW){
+            display.setTextSize(4); // Draw 3X-scale text
+            display.setTextColor(SSD1306_WHITE);
+            display.setCursor(2,2);
             display.println("SAFETY ON");
         }
     }

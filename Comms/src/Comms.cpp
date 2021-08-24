@@ -7,7 +7,7 @@
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 32 // OLED display height, in pixels
 
-#define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
+#define OLED_RESET     4 // Reset pin # (or -1 if sharing Arduino reset pin)
 #define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
@@ -37,6 +37,7 @@ float timeofstatechange = 0;
 bool safetystate = true;
 
 void setup(){ // Wanna ride me?
+    display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS); //initialize display
     attachInterrupt(digitalPinToInterrupt(2),trigger,RISING); // Interrupt to instantly trigger the stager
     attachInterrupt(digitalPinToInterrupt(2),releasetrigger,FALLING); // Interrupt to instantly pull stager to low
     pinMode(safety, INPUT); // Safety switch Normally LOW
@@ -56,6 +57,8 @@ void releasetrigger(){
 }
 
 void loop(){
+    Serial.println("loop start");
+
     if (digitalRead(safety) == HIGH){
         digitalWrite(RGB_green, LOW);
         digitalWrite(RGB_red, HIGH);
@@ -100,7 +103,7 @@ void loop(){
         if (safetystate == false){
             display.drawRect(0,0,127,31,WHITE); // TODO Once I have the screen I will have to test out the functionality of this code // Note: round recangles exist as well 
         }
-        display.setTextSize(2);             // Draw 2X-scale text
+        display.setTextSize(3); // Draw 3X-scale text
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(8,8);
         display.println(vin);
@@ -113,6 +116,7 @@ void loop(){
             display.println("SAFETY ON");
         }
     }
-    display.display();
 
+    display.display();
+    display.clearDisplay();
 }

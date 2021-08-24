@@ -63,7 +63,7 @@ void loop(){
         if (safetystate == true){
             timeofstatechange = millis();  // Resets statechange timer
         }
-        if (millis() - timeofstatechange < 1000){
+        if (millis() - timeofstatechange < 2000){
             statusmessage = true;
         }
         else{
@@ -78,7 +78,7 @@ void loop(){
         if (safetystate == false){
             timeofstatechange = millis(); // Resets statechange timer
         }
-        if (millis() - timeofstatechange < 1000){
+        if (millis() - timeofstatechange < 2000){
             statusmessage = true;
         }
         else{
@@ -107,16 +107,14 @@ void loop(){
         display.println(vin);
     }
     else if (statusmessage == true){ // Check if screen needs to display safety change
+        display.setTextSize(2);
+        display.setTextColor(SSD1306_WHITE);
+        display.setCursor(0,13);
+        
         if (digitalRead(safety) == HIGH){
-            display.setTextSize(4); // Draw 3X-scale text
-            display.setTextColor(SSD1306_WHITE);
-            display.setCursor(2,2);
             display.println("SAFETY OFF");
         }
         else if (digitalRead(safety) == LOW){
-            display.setTextSize(4); // Draw 3X-scale text
-            display.setTextColor(SSD1306_WHITE);
-            display.setCursor(2,2);
             display.println("SAFETY ON");
         }
     }

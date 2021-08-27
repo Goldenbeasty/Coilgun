@@ -106,7 +106,7 @@ void loop(){
 
     value = analogRead(volt); // read the value at analog input
     vout = (value * 5.0) / 1024.0; // see text
-    vin = vout / (R2/(R1+R2)); 
+    vin = vout / (R2/(R1+R2)); // TODO #6 avarage of last second
     if (vin<0.9) {
     vin=0.0;//statement to quash undesired reading !
     }
@@ -125,7 +125,7 @@ void loop(){
             display.println("LOW");
         }
 
-        if (triggerdown == true){
+        if (triggerdown == true){ // BUG #7 when voltage is >= 10 V (2 primary digits) the LOW and PUK indicators are written over
             display.setCursor(100,16);
             display.setTextSize(1);
             display.println("PUK"); // Stands for pumped up kicks

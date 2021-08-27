@@ -12,8 +12,8 @@
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-void trigger(); // As the file is written in VS code in .cpp using PlatformIO needed // If you buld this in Arduino IDE this line is not needed
-void releasetrigger(); // As the file is written in VS code in .cpp using PlatformIO needed // If you buld this in Arduino IDE this line is not needed
+// void trigger(); // As the file is written in VS code in .cpp using PlatformIO needed // If you buld this in Arduino IDE this line is not needed
+// void releasetrigger(); // As the file is written in VS code in .cpp using PlatformIO needed // If you buld this in Arduino IDE this line is not needed
 
 const int safety = 4;
 const int ohterarduino = 5;
@@ -30,16 +30,19 @@ float vin = 0.0;
 float R1 = 100000.0; // resistance of R1 (100K)
 float R2 = 10000.0; // resistance of R2 (10K)
 int value = 0; // for calculating Vbat
+const float critvoltage = 22.2;
 
 // Needed to display safety change
 bool statusmessage = false;
 float timeofstatechange = 0;
 bool safetystate = true;
+bool triggerdown = true; // voletile
 
 void setup(){ // Wanna ride me?
+    pinMode(2,INPUT); // Set trigger pin
     display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS); //initialize display
-    attachInterrupt(digitalPinToInterrupt(2),trigger,RISING); // Interrupt to instantly trigger the stager
-    attachInterrupt(digitalPinToInterrupt(2),releasetrigger,FALLING); // Interrupt to instantly pull stager to low
+    // attachInterrupt(digitalPinToInterrupt(2),trigger,RISING); // Interrupt to instantly trigger the stager
+    // attachInterrupt(digitalPinToInterrupt(2),releasetrigger,FALLING); // Interrupt to instantly pull stager to low
     pinMode(safety, INPUT); // Safety switch Normally LOW
     pinMode(volt, INPUT); // Battery voltage level according to the voltage divider
     pinMode(RGB_red, OUTPUT); // Red led logic output for led strip
@@ -47,17 +50,28 @@ void setup(){ // Wanna ride me?
     pinMode(RGB_blue, OUTPUT); // Blue led logic output for led strip
 }
 
-void trigger(){ // TODO Implement a way to show that trigger is pushed down on OLED
-    if (digitalRead(safety) == HIGH){
-        digitalWrite(ohterarduino,HIGH);
-    }
-}
-void releasetrigger(){
-    digitalWrite(ohterarduino, LOW);
-}
+// void trigger(){ // TODO Implement a way to show that trigger is pushed down on OLED
+//     if (digitalRead(safety) == HIGH){
+//         digitalWrite(ohterarduino,HIGH);
+//     }
+//     triggerdown = true;
+// }
+// void releasetrigger(){
+//     digitalWrite(ohterarduino, LOW);
+//     triggerdown = false;
+// }
+
+// TODO #5 remove old code
 
 void loop(){
-    if (digitalRead(safety) == HIGH){
+    if (digitalRead(2) == HIGH){ // Read trigger state
+        triggerdown = true;
+    }
+    else{
+        triggerdown = false;
+    }
+
+    if (digitalRead(safety) == HIGH){ // Read safety state
         digitalWrite(RGB_green, LOW);
         digitalWrite(RGB_red, HIGH);
         if (safetystate == true){
@@ -93,19 +107,31 @@ void loop(){
     value = analogRead(volt); // read the value at analog input
     vout = (value * 5.0) / 1024.0; // see text
     vin = vout / (R2/(R1+R2)); 
-    if (vin<0.09) {
+    if (vin<0.9) {
     vin=0.0;//statement to quash undesired reading !
     }
     if (statusmessage == false){ // Checks for display priority  // Do I need to implement a framerate cap?
-        // TODO OLED refine control, Voltage monitoring
         if (safetystate == false){
-            display.drawRect(0,0,127,31,WHITE); // TODO Once I have the screen I will have to test out the functionality of this code // Note: round recangles exist as well 
+            display.drawRect(0,0,128,32,WHITE); // Note: round recangles exist as well 
         }
         display.setTextSize(4); // Draw 3X-scale text
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(2,2);
         display.println(vin);
+
+        if (vin < critvoltage and vin != 0.0){
+            display.setCursor(100,4);
+            display.setTextSize(1);
+            display.println("LOW");
+        }
+
+        if (triggerdown == true){
+            display.setCursor(100,16);
+            display.setTextSize(1);
+            display.println("PUK"); // Stands for pumped up kicks
+        }
     }
+    
     else if (statusmessage == true){ // Check if screen needs to display safety change
         display.setTextSize(2);
         display.setTextColor(SSD1306_WHITE);

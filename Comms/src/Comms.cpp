@@ -20,9 +20,9 @@ const int ohterarduino = 5;
 const int volt = A7;
 
 // Defined RGB control pins (all pins are PWM)
-const int RGB_red = 9;
-const int RGB_green = 10;
-const int RGB_blue = 11;
+const int RGB_red = 10;
+const int RGB_green = 11;
+const int RGB_blue = 9;
 
 // Needed to calculate the battery voltage
 float vout = 0.0;

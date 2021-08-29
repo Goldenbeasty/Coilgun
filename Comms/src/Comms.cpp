@@ -35,6 +35,10 @@ float timeofstatechange = 0;
 bool safetystate = true;
 bool triggerdown = true;
 
+const int samplecount = 10;
+float voltagearray [samplecount][2];
+int currentarray = 0;
+
 void setup(){
     pinMode(2,INPUT); // Set trigger pin
     display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS); //initialize display
@@ -90,6 +94,18 @@ void loop(){
     if (vin<0.9) {
     vin=0.0; //statement to quash undesired reading !
     }
+    voltagearray [currentarray][1] = vin;
+    for (int i = 0; i < samplecount; i++){
+        vin = vin + voltagearray[i][1];
+    }
+    vin = vin / samplecount;
+    if (currentarray < samplecount){
+        currentarray++;
+    }
+    if(currentarray >= samplecount){
+        currentarray = 0;
+    }
+
     if (statusmessage == false){ // Checks for display priority  // Do I need to implement a framerate cap?
         if (safetystate == false){
             display.drawRect(0,0,128,32,WHITE); // Note: round recangles exist as well 

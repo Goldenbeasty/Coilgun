@@ -24,8 +24,8 @@ const int RGB_blue = 9;
 // Needed to calculate the battery voltage
 float vout = 0.0;
 float vin = 0.0;
-float R1 = 100000.0; // resistance of R1 (R15)(100K)
-float R2 = 10000.0; // resistance of R2 (R16)(10K)
+float R1 = 98100.0; // resistance of R1 (R15)(100K)
+float R2 = 10607.0; // resistance of R2 (R16)(10K)
 int value = 0; // for calculating Vbat
 const float critvoltage = 22.2;
 
@@ -35,7 +35,7 @@ float timeofstatechange = 0;
 bool safetystate = true;
 bool triggerdown = true;
 
-const int samplecount = 10;
+const int samplecount = 50;
 float voltagearray [samplecount][2];
 int currentarray = 0;
 

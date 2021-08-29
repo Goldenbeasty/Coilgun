@@ -12,9 +12,6 @@
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-// void trigger(); // As the file is written in VS code in .cpp using PlatformIO needed // If you buld this in Arduino IDE this line is not needed
-// void releasetrigger(); // As the file is written in VS code in .cpp using PlatformIO needed // If you buld this in Arduino IDE this line is not needed
-
 const int safety = 4;
 const int ohterarduino = 5;
 const int volt = A7;
@@ -27,8 +24,8 @@ const int RGB_blue = 9;
 // Needed to calculate the battery voltage
 float vout = 0.0;
 float vin = 0.0;
-float R1 = 100000.0; // resistance of R1 (100K)
-float R2 = 10000.0; // resistance of R2 (10K)
+float R1 = 100000.0; // resistance of R1 (R15)(100K)
+float R2 = 10000.0; // resistance of R2 (R16)(10K)
 int value = 0; // for calculating Vbat
 const float critvoltage = 22.2;
 
@@ -36,32 +33,17 @@ const float critvoltage = 22.2;
 bool statusmessage = false;
 float timeofstatechange = 0;
 bool safetystate = true;
-bool triggerdown = true; // voletile
+bool triggerdown = true;
 
-void setup(){ // Wanna ride me?
+void setup(){
     pinMode(2,INPUT); // Set trigger pin
     display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS); //initialize display
-    // attachInterrupt(digitalPinToInterrupt(2),trigger,RISING); // Interrupt to instantly trigger the stager
-    // attachInterrupt(digitalPinToInterrupt(2),releasetrigger,FALLING); // Interrupt to instantly pull stager to low
     pinMode(safety, INPUT); // Safety switch Normally LOW
     pinMode(volt, INPUT); // Battery voltage level according to the voltage divider
     pinMode(RGB_red, OUTPUT); // Red led logic output for led strip
     pinMode(RGB_green, OUTPUT); // Green led logic output for led strip
     pinMode(RGB_blue, OUTPUT); // Blue led logic output for led strip
 }
-
-// void trigger(){ // TODO Implement a way to show that trigger is pushed down on OLED
-//     if (digitalRead(safety) == HIGH){
-//         digitalWrite(ohterarduino,HIGH);
-//     }
-//     triggerdown = true;
-// }
-// void releasetrigger(){
-//     digitalWrite(ohterarduino, LOW);
-//     triggerdown = false;
-// }
-
-// TODO #5 remove old code
 
 void loop(){
     if (digitalRead(2) == HIGH){ // Read trigger state
@@ -102,13 +84,11 @@ void loop(){
         safetystate = true;
     }
 
-    // God's Blessing on this Wonderful World!
-
     value = analogRead(volt); // read the value at analog input
-    vout = (value * 5.0) / 1024.0; // see text
+    vout = (value * 5.0) / 1024.0;
     vin = vout / (R2/(R1+R2)); // TODO #6 avarage of last second
     if (vin<0.9) {
-    vin=0.0;//statement to quash undesired reading !
+    vin=0.0; //statement to quash undesired reading !
     }
     if (statusmessage == false){ // Checks for display priority  // Do I need to implement a framerate cap?
         if (safetystate == false){

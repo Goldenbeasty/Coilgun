@@ -17,6 +17,4 @@ Required Arduino libraries:
  
  Gerber files for the PCB can be found at /PCB.zip 
  
- note that this is not the final PCB design
- 
  On the PCB U1 is Comms and U2 is Stager.

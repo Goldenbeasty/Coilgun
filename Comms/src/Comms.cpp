@@ -166,9 +166,9 @@ void loop(){
 
     value = analogRead(volt); // read the value at analog input
     vout = (value * 5.0) / 1024.0;
-    vin = vout / (R2/(R1+R2)); // TODO #6 avarage of last second
+    vin = vout / (R2/(R1+R2));
     if (vin<0.9) {
-    vin=0.0; //statement to quash undesired reading !
+    vin=0.0; //statement to quash undesired reading!
     }
     voltagearray [currentarray][1] = vin;
     for (int i = 0; i < samplecount; i++){

@@ -20,6 +20,10 @@ const int volt = A7;
 const int RGB_red = 10;
 const int RGB_green = 11;
 const int RGB_blue = 9;
+int R_value = 0;
+int G_value = 0;
+int B_value = 0;
+bool dohuechange = true;
 
 // Needed to calculate the battery voltage
 float vout = 0.0;
@@ -58,8 +62,10 @@ void loop(){
     }
 
     if (digitalRead(safety) == HIGH){ // Read safety state
-        digitalWrite(RGB_green, LOW);
-        digitalWrite(RGB_red, HIGH);
+        R_value = 255;
+        G_value = 0;
+        B_value = 0;
+
         if (safetystate == true){
             timeofstatechange = millis();  // Resets statechange timer
         }
@@ -73,8 +79,10 @@ void loop(){
         safetystate = false;
     }
     else if (digitalRead(safety) == LOW){
-        digitalWrite(RGB_red, LOW);
-        digitalWrite(RGB_green, HIGH);
+        R_value = 0;
+        G_value = 255;
+        B_value = 0;
+
         if (safetystate == false){
             timeofstatechange = millis(); // Resets statechange timer
         }
@@ -141,6 +149,9 @@ void loop(){
         }
     }
 
+    analogWrite(RGB_red, R_value);
+    analogWrite(RGB_green, G_value);
+    analogWrite(RGB_blue, B_value);
     display.display();
     display.clearDisplay();
 }

@@ -24,6 +24,7 @@ int R_value = 0;
 int G_value = 0;
 int B_value = 0;
 bool dohuechange = true;
+int huestate = 0;
 
 // Needed to calculate the battery voltage
 float vout = 0.0;
@@ -65,6 +66,7 @@ void loop(){
         R_value = 255;
         G_value = 0;
         B_value = 0;
+        dohuechange = false;
 
         if (safetystate == true){
             timeofstatechange = millis();  // Resets statechange timer
@@ -79,9 +81,15 @@ void loop(){
         safetystate = false;
     }
     else if (digitalRead(safety) == LOW){
-        R_value = 0;
-        G_value = 255;
-        B_value = 0;
+
+        if (millis() - timeofstatechange < 10000){
+            R_value = 0;
+            G_value = 255;
+            B_value = 0;
+        }
+        else {
+            dohuechange = true;
+        }
 
         if (safetystate == false){
             timeofstatechange = millis(); // Resets statechange timer
@@ -94,6 +102,66 @@ void loop(){
         }
 
         safetystate = true;
+    }
+
+    if (dohuechange == true){ // TODO add a timer to make it synchronous
+        if (huestate == 0){
+            R_value = 255;
+            if (G_value < 255){
+                G_value++;
+            }
+            if (G_value >= 255){
+                huestate++;
+            }
+        }
+        if (huestate == 1){
+            G_value = 255;
+            if (R_value > 0){
+                R_value--;
+            }
+            if (R_value <= 0){
+                huestate++;
+            }
+        }
+        if (huestate == 2){
+            G_value = 255; // TODO technically doesn't need it as it is mentioned before
+            if (B_value < 255){
+                B_value++;
+            }
+            if (B_value >= 255){
+                huestate++;
+            }
+        }
+        if (huestate == 3){
+            B_value = 255;
+            if (G_value > 0){
+                G_value--;
+            }
+            if (G_value <= 0){
+                huestate++;
+            }
+        }
+        if (huestate == 4){
+            B_value = 255; // TODO technically doesn't need it as it is mentioned before
+            if (R_value < 255){
+                R_value++;
+            }
+            if (R_value >= 255){
+                huestate++;
+            }
+        }
+        if (huestate == 5){
+            R_value = 255;
+            if (B_value > 0){
+                B_value--;
+            }
+            if (B_value <= 0){
+                huestate++;
+            }
+        }
+        if (huestate >= 6){
+            huestate = 0;
+        }
     }
 
     value = analogRead(volt); // read the value at analog input

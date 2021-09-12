@@ -104,7 +104,7 @@ void loop(){
         safetystate = true;
     }
 
-    if (dohuechange == true){ // TODO add a timer to make it synchronous
+    if (dohuechange == true){ // TODO #11 add a timer to make RGB asynchronous
         if (huestate == 0){
             R_value = 255;
             if (G_value < 255){
@@ -184,7 +184,7 @@ void loop(){
 
     if (statusmessage == false){ // Checks for display priority  // Do I need to implement a framerate cap?
         if (safetystate == false){
-            display.drawRect(0,0,128,32,WHITE); // Note: round recangles exist as well 
+            display.drawRoundRect(0,0,128,32,3,WHITE);
         }
         display.setTextSize(4); // Draw 3X-scale text
         display.setTextColor(SSD1306_WHITE);

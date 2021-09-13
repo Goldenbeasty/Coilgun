@@ -20,11 +20,13 @@ const int volt = A7;
 const int RGB_red = 10;
 const int RGB_green = 11;
 const int RGB_blue = 9;
-int R_value = 0;
-int G_value = 0;
-int B_value = 0;
+float R_value = 0;
+float G_value = 0;
+float B_value = 0;
 bool dohuechange = true;
-int huestate = 0;
+int hue = 0;
+float time_of_last_hue_reset = 0;
+int huecycle_time = 10000;
 
 // Needed to calculate the battery voltage
 float vout = 0.0;
@@ -41,7 +43,7 @@ bool safetystate = true;
 bool triggerdown = true;
 
 const int samplecount = 50;
-float voltagearray [samplecount][2];
+float voltagearray [samplecount][2]; // TODO #12 is this nessesary?
 int currentarray = 0;
 
 void setup(){
@@ -104,63 +106,33 @@ void loop(){
         safetystate = true;
     }
 
-    if (dohuechange == true){ // TODO #11 add a timer to make RGB asynchronous
-        if (huestate == 0){
-            R_value = 255;
-            if (G_value < 255){
-                G_value++;
-            }
-            if (G_value >= 255){
-                huestate++;
-            }
+    if (dohuechange == true){ // Somehow the most difficult part of writing this code
+        hue = (millis() - time_of_last_hue_reset) * 360 / huecycle_time; // Calculates current hue based on time passed since last hue reset
+
+        if (0 < hue and hue <= 60){
+            G_value = hue * 4.25;
         }
-        if (huestate == 1){
-            G_value = 255;
-            if (R_value > 0){
-                R_value--;
-            }
-            if (R_value <= 0){
-                huestate++;
-            }
+        if (60 < hue and hue <= 120){
+            R_value = 255 - ((hue - 60) * 4.25);
         }
-        if (huestate == 2){
-            G_value = 255; // TODO technically doesn't need it as it is mentioned before
-            if (B_value < 255){
-                B_value++;
-            }
-            if (B_value >= 255){
-                huestate++;
-            }
+        if (120 < hue and hue <= 180){
+            B_value = (hue - 120) * 4.25;
         }
-        if (huestate == 3){
-            B_value = 255;
-            if (G_value > 0){
-                G_value--;
-            }
-            if (G_value <= 0){
-                huestate++;
-            }
+        if (180 < hue and hue <= 240){
+            G_value = 255 - ((hue - 180) * 4.25);
         }
-        if (huestate == 4){
-            B_value = 255; // TODO technically doesn't need it as it is mentioned before
-            if (R_value < 255){
-                R_value++;
-            }
-            if (R_value >= 255){
-                huestate++;
-            }
+        if (240 < hue and hue <= 300){
+            R_value = (hue - 240) * 4.25;
         }
-        if (huestate == 5){
-            R_value = 255;
-            if (B_value > 0){
-                B_value--;
-            }
-            if (B_value <= 0){
-                huestate++;
-            }
+        if (300 < hue and hue <= 360){
+            B_value = 255 - ((hue - 300) * 4.25);
         }
-        if (huestate >= 6){
-            huestate = 0;
+        if (hue > 360){
+            time_of_last_hue_reset = millis(); // timer reset
+
+            R_value = 255; // For some reason needed to make it loop nicely
+            G_value = 0;
+            B_value = 0;
         }
     }
 
@@ -220,6 +192,7 @@ void loop(){
     analogWrite(RGB_red, R_value);
     analogWrite(RGB_green, G_value);
     analogWrite(RGB_blue, B_value);
+    Serial.println();
     display.display();
     display.clearDisplay();
 }

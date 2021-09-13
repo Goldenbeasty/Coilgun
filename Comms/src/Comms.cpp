@@ -24,8 +24,10 @@ float R_value = 0;
 float G_value = 0;
 float B_value = 0;
 bool dohuechange = true;
-int huestate = 0;
+// int huestate = 0;
 int hue = 0;
+float time_of_last_hue_reset = 0;
+int huecycle_time = 10000;
 
 // Needed to calculate the battery voltage
 float vout = 0.0;
@@ -42,10 +44,11 @@ bool safetystate = true;
 bool triggerdown = true;
 
 const int samplecount = 50;
-float voltagearray [samplecount][2];
+float voltagearray [samplecount][2]; // TODO #12 is this nessesary?
 int currentarray = 0;
 
 void setup(){
+    Serial.begin(9600); // DEBUG
     pinMode(2,INPUT); // Set trigger pin
     display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS); //initialize display
     pinMode(safety, INPUT); // Safety switch Normally LOW
@@ -106,29 +109,35 @@ void loop(){
     }
 
     if (dohuechange == true){ // TODO #11 add a timer to make RGB asynchronous
+
+        hue = (millis() - time_of_last_hue_reset) * 360 / huecycle_time;
+
+        Serial.println(hue); // DEBUG
+
         if (0 < hue and hue <= 60){
             G_value = hue * 4.25;
         }
         if (60 < hue and hue <= 120){
-            R_value = 1 / ((hue - 60) * 4.25);
+            R_value = 255 / ((hue - 60) * 4.25);
         }
         if (120 < hue and hue <= 180){
             B_value = (hue - 120) * 4.25;
         }
         if (180 < hue and hue <= 240){
-            G_value = 1 / ((hue - 180) * 4.25);
+            G_value = 255 / ((hue - 180) * 4.25);
         }
         if (240 < hue and hue <= 300){
             R_value = (hue - 240) * 4.25;
         }
         if (300 < hue and hue <= 360){
-            B_value = 1 / ((hue - 300) * 4.25);
+            B_value = 255 / ((hue - 300) * 4.25);
         }
-        if (hue <= 360){
-            hue++;
-        }
+        // if (hue <= 360){
+        //     hue++;
+        // }
         if (hue > 360){
-            hue = 0;
+            // hue = 0;
+            time_of_last_hue_reset = millis();
         }
         // if (huestate == 0){
         //     R_value = 255;
@@ -245,6 +254,13 @@ void loop(){
     analogWrite(RGB_red, R_value);
     analogWrite(RGB_green, G_value);
     analogWrite(RGB_blue, B_value);
+    Serial.print("  "); // DEBUG
+    Serial.print(R_value); // DEBUG
+    Serial.print(" ");  // DEBUG
+    Serial.print(G_value); // DEBUG
+    Serial.print(" ");  // DEBUG
+    Serial.print(B_value); // DEBUG
+    Serial.println();
     display.display();
     display.clearDisplay();
 }

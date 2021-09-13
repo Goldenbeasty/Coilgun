@@ -20,11 +20,12 @@ const int volt = A7;
 const int RGB_red = 10;
 const int RGB_green = 11;
 const int RGB_blue = 9;
-int R_value = 0;
-int G_value = 0;
-int B_value = 0;
+float R_value = 0;
+float G_value = 0;
+float B_value = 0;
 bool dohuechange = true;
 int huestate = 0;
+int hue = 0;
 
 // Needed to calculate the battery voltage
 float vout = 0.0;
@@ -105,63 +106,87 @@ void loop(){
     }
 
     if (dohuechange == true){ // TODO #11 add a timer to make RGB asynchronous
-        if (huestate == 0){
-            R_value = 255;
-            if (G_value < 255){
-                G_value++;
-            }
-            if (G_value >= 255){
-                huestate++;
-            }
+        if (0 < hue and hue <= 60){
+            G_value = hue * 4.25;
         }
-        if (huestate == 1){
-            G_value = 255;
-            if (R_value > 0){
-                R_value--;
-            }
-            if (R_value <= 0){
-                huestate++;
-            }
+        if (60 < hue and hue <= 120){
+            R_value = 1 / ((hue - 60) * 4.25);
         }
-        if (huestate == 2){
-            G_value = 255; // TODO technically doesn't need it as it is mentioned before
-            if (B_value < 255){
-                B_value++;
-            }
-            if (B_value >= 255){
-                huestate++;
-            }
+        if (120 < hue and hue <= 180){
+            B_value = (hue - 120) * 4.25;
         }
-        if (huestate == 3){
-            B_value = 255;
-            if (G_value > 0){
-                G_value--;
-            }
-            if (G_value <= 0){
-                huestate++;
-            }
+        if (180 < hue and hue <= 240){
+            G_value = 1 / ((hue - 180) * 4.25);
         }
-        if (huestate == 4){
-            B_value = 255; // TODO technically doesn't need it as it is mentioned before
-            if (R_value < 255){
-                R_value++;
-            }
-            if (R_value >= 255){
-                huestate++;
-            }
+        if (240 < hue and hue <= 300){
+            R_value = (hue - 240) * 4.25;
         }
-        if (huestate == 5){
-            R_value = 255;
-            if (B_value > 0){
-                B_value--;
-            }
-            if (B_value <= 0){
-                huestate++;
-            }
+        if (300 < hue and hue <= 360){
+            B_value = 1 / ((hue - 300) * 4.25);
         }
-        if (huestate >= 6){
-            huestate = 0;
+        if (hue <= 360){
+            hue++;
         }
+        if (hue > 360){
+            hue = 0;
+        }
+        // if (huestate == 0){
+        //     R_value = 255;
+        //     if (G_value < 255){
+        //         G_value++;
+        //     }
+        //     if (G_value >= 255){
+        //         huestate++;
+        //     }
+        // }
+        // if (huestate == 1){
+        //     G_value = 255;
+        //     if (R_value > 0){
+        //         R_value--;
+        //     }
+        //     if (R_value <= 0){
+        //         huestate++;
+        //     }
+        // }
+        // if (huestate == 2){
+        //     G_value = 255; // TODO technically doesn't need it as it is mentioned before
+        //     if (B_value < 255){
+        //         B_value++;
+        //     }
+        //     if (B_value >= 255){
+        //         huestate++;
+        //     }
+        // }
+        // if (huestate == 3){
+        //     B_value = 255;
+        //     if (G_value > 0){
+        //         G_value--;
+        //     }
+        //     if (G_value <= 0){
+        //         huestate++;
+        //     }
+        // }
+        // if (huestate == 4){
+        //     B_value = 255; // TODO technically doesn't need it as it is mentioned before
+        //     if (R_value < 255){
+        //         R_value++;
+        //     }
+        //     if (R_value >= 255){
+        //         huestate++;
+        //     }
+        // }
+        // if (huestate == 5){
+        //     R_value = 255;
+        //     if (B_value > 0){
+        //         B_value--;
+        //     }
+        //     if (B_value <= 0){
+        //         huestate++;
+        //     }
+        // }
+        // if (huestate >= 6){
+        //     huestate = 0;
+        // }
     }
 
     value = analogRead(volt); // read the value at analog input

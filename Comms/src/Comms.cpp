@@ -26,7 +26,7 @@ float B_value = 0;
 bool dohuechange = true;
 int hue = 0;
 float time_of_last_hue_reset = 0;
-int huecycle_time = 10000;
+int huecycle_time = 30000;
 
 // Needed to calculate the battery voltage
 float vout = 0.0;

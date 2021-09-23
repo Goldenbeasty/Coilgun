@@ -43,7 +43,7 @@ bool safetystate = true;
 bool triggerdown = true;
 
 const int samplecount = 50;
-float voltagearray [samplecount][2]; // TODO #12 is this nessesary?
+float voltagearray [samplecount];
 int currentarray = 0;
 
 void setup(){
@@ -142,9 +142,9 @@ void loop(){
     if (vin<0.9) {
     vin=0.0; //statement to quash undesired reading!
     }
-    voltagearray [currentarray][1] = vin;
+    voltagearray [currentarray] = vin;
     for (int i = 0; i < samplecount; i++){
-        vin = vin + voltagearray[i][1];
+        vin = vin + voltagearray[i];
     }
     vin = vin / samplecount;
     if (currentarray < samplecount){

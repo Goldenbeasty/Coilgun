@@ -105,6 +105,10 @@ void loop(){
         }
         else{
             statusmessage = false;
+            
+            if (triggerdown){ // The part where it is actually shot
+                digitalWrite(ohterarduino, HIGH);
+            }
         }
 
         safetystate = false;
@@ -167,7 +171,7 @@ void loop(){
     vout = (value * 5.0) / 1024.0;
     vin = vout / (R2/(R1+R2));
     if (vin<0.9) {
-    vin=0.0; //statement to quash undesired reading!
+    vin=0.0; // If no battery is connected don't bother updating with imprecise
     }
     voltagearray [currentarray] = vin;
     for (int i = 0; i < samplecount; i++){

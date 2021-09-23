@@ -84,14 +84,14 @@ void setup(){
 }
 
 void loop(){
-    if (digitalRead(2) == HIGH){ // Read trigger state
+    if (digitalRead(2)){ // Read trigger state
         triggerdown = true;
     }
     else{
         triggerdown = false;
     }
 
-    if (digitalRead(safety) == HIGH){ // Read safety state
+    if (digitalRead(safety)){ // Read safety state
         R_value = 255;
         G_value = 0;
         B_value = 0;
@@ -208,7 +208,7 @@ void loop(){
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(0,13);
 
-        if (digitalRead(safety) == HIGH){
+        if (digitalRead(safety)){
             display.println("SAFETY OFF");
         }
         else if (digitalRead(safety) == LOW){

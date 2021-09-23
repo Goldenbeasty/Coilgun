@@ -84,14 +84,14 @@ void setup(){
 }
 
 void loop(){
-    if (digitalRead(2) == HIGH){ // Read trigger state
+    if (digitalRead(2)){ // Read trigger state
         triggerdown = true;
     }
     else{
         triggerdown = false;
     }
 
-    if (digitalRead(safety) == HIGH){ // Read safety state
+    if (digitalRead(safety)){ // Read safety state
         R_value = 255;
         G_value = 0;
         B_value = 0;
@@ -105,20 +105,34 @@ void loop(){
         }
         else{
             statusmessage = false;
+            
+            if (triggerdown){ // The part where it is actually shot
+                digitalWrite(ohterarduino, HIGH);
+            }
         }
 
         safetystate = false;
     }
     else if (digitalRead(safety) == LOW){
 
-        if (millis() - timeofstatechange < 10000){
+        if (triggerdown){
             R_value = 0;
-            G_value = 255;
-            B_value = 0;
+            G_value = 0;
+            B_value = 255;
+            dohuechange = false;
+            timeofstatechange = millis();
         }
-        else {
-            dohuechange = true;
+        else{
+            if (millis() - timeofstatechange < 10000){
+                R_value = 0;
+                G_value = 255;
+                B_value = 0;
+            }
+            else {
+                dohuechange = true;
+            }
         }
+        
 
         if (safetystate == false){
             timeofstatechange = millis(); // Resets statechange timer
@@ -167,7 +181,7 @@ void loop(){
     vout = (value * 5.0) / 1024.0;
     vin = vout / (R2/(R1+R2));
     if (vin<0.9) {
-    vin=0.0; //statement to quash undesired reading!
+    vin=0.0; // If no battery is connected don't bother updating with imprecise
     }
     voltagearray [currentarray] = vin;
     for (int i = 0; i < samplecount; i++){
@@ -208,7 +222,7 @@ void loop(){
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(0,13);
 
-        if (digitalRead(safety) == HIGH){
+        if (digitalRead(safety)){
             display.println("SAFETY OFF");
         }
         else if (digitalRead(safety) == LOW){

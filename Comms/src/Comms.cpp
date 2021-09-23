@@ -115,14 +115,24 @@ void loop(){
     }
     else if (digitalRead(safety) == LOW){
 
-        if (millis() - timeofstatechange < 10000){
+        if (triggerdown){
             R_value = 0;
-            G_value = 255;
-            B_value = 0;
+            G_value = 0;
+            B_value = 255;
+            dohuechange = false;
+            timeofstatechange = millis();
         }
-        else {
-            dohuechange = true;
+        else{
+            if (millis() - timeofstatechange < 10000){
+                R_value = 0;
+                G_value = 255;
+                B_value = 0;
+            }
+            else {
+                dohuechange = true;
+            }
         }
+        
 
         if (safetystate == false){
             timeofstatechange = millis(); // Resets statechange timer

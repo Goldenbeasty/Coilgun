@@ -70,7 +70,7 @@ void loop(){
         B_value = 0;
         dohuechange = false;
 
-        if (safetystate == true){
+        if (safetystate){
             timeofstatechange = millis();  // Resets statechange timer
         }
         if (millis() - timeofstatechange < 2000){
@@ -106,7 +106,7 @@ void loop(){
         safetystate = true;
     }
 
-    if (dohuechange == true){ // Somehow the most difficult part of writing this code
+    if (dohuechange){ // Somehow the most difficult part of writing this code
         hue = (millis() - time_of_last_hue_reset) * 360 / huecycle_time; // Calculates current hue based on time passed since last hue reset
 
         if (0 < hue and hue <= 60){
@@ -169,14 +169,14 @@ void loop(){
             display.println("LOW");
         }
 
-        if (triggerdown == true){ // BUG #7 when voltage is >= 10 V (2 primary digits) the LOW and PUK indicators are written over
+        if (triggerdown){ // BUG #7 when voltage is >= 10 V (2 primary digits) the LOW and PUK indicators are written over
             display.setCursor(100,16);
             display.setTextSize(1);
             display.println("PUK"); // Stands for pumped up kicks
         }
     }
     
-    else if (statusmessage == true){ // Check if screen needs to display safety change
+    else if (statusmessage){ // Check if screen needs to display safety change
         display.setTextSize(2);
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(0,13);

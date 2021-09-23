@@ -43,7 +43,7 @@ bool safetystate = true;
 bool triggerdown = true;
 
 const int samplecount = 50;
-float voltagearray [samplecount]; // TODO #12 is this nessesary?
+float voltagearray [samplecount];
 int currentarray = 0;
 
 void setup(){

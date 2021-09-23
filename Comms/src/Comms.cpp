@@ -55,7 +55,7 @@ void setup(){
     pinMode(RGB_green, OUTPUT); // Green led logic output for led strip
     pinMode(RGB_blue, OUTPUT); // Blue led logic output for led strip
 
-    while (digitalRead(safety) == HIGH){
+    while (digitalRead(safety)){
         display.setTextSize(2);
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(2,2);
@@ -68,7 +68,7 @@ void setup(){
         digitalWrite(RGB_green, LOW);
         digitalWrite(RGB_blue, LOW);
     }
-    while (digitalRead(2) == true){
+    while (digitalRead(2)){
         display.setTextSize(2);
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(2,2);

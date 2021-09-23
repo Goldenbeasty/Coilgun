@@ -132,7 +132,6 @@ void loop(){
                 dohuechange = true;
             }
         }
-        
 
         if (safetystate == false){
             timeofstatechange = millis(); // Resets statechange timer

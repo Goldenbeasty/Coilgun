@@ -181,7 +181,7 @@ void loop(){
     vout = (value * 5.0) / 1024.0;
     vin = vout / (R2/(R1+R2));
     if (vin<0.9) {
-    vin=0.0; // If no battery is connected don't bother updating with imprecise
+    vin=0.0; // If no battery is connected don't bother updating with imprecise readings
     }
     voltagearray [currentarray] = vin;
     for (int i = 0; i < samplecount; i++){

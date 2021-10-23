@@ -202,7 +202,13 @@ void loop(){
         display.setTextSize(4); // Draw 3X-scale text
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(2,2);
-        display.println(vin);
+        display.println(int(floor(vin)));
+        // display.setCursor()
+        // display.println(".")
+        display.setTextSize(2);
+        display.setCursor(48,16);
+        display.print(int((vin - floor(vin)) * 100));
+
 
         if (vin < critvoltage and vin != 0.0){
             display.setCursor(100,4);
@@ -233,6 +239,20 @@ void loop(){
     analogWrite(RGB_red, R_value);
     analogWrite(RGB_green, G_value);
     analogWrite(RGB_blue, B_value);
+
+    // DEBUG
+    // display.clearDisplay();
+    // display.setTextSize(1);
+    // display.setTextColor(SSD1306_WHITE);
+    // display.setCursor(2,2);
+    // display.println(vin); 
+    // display.setCursor(2,16);
+    // display.println(int(vin));
+    // display.setCursor(64,2);
+    // display.println(int(floor(vin)));
+    // display.setCursor(64,16);
+    // display.println(int(ceil(vin)));
+
     Serial.println();
     display.display();
     display.clearDisplay();

@@ -13,6 +13,7 @@
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 const int safety = 4;
+const int trigger = 2;
 const int ohterarduino = 5;
 const int volt = A7;
 
@@ -47,7 +48,7 @@ float voltagearray [samplecount];
 int currentarray = 0;
 
 void setup(){
-    pinMode(2,INPUT); // Set trigger pin
+    pinMode(trigger ,INPUT); // Set trigger pin
     display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS); //initialize display
     pinMode(safety, INPUT); // Safety switch Normally LOW
     pinMode(volt, INPUT); // Battery voltage level according to the voltage divider
@@ -59,7 +60,7 @@ void setup(){
         display.setTextSize(2);
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(2,2);
-        display.println("Switch");
+        display.println("Safety");
         display.setCursor(2,16);
         display.println("Warning!");
         display.display();
@@ -68,7 +69,7 @@ void setup(){
         digitalWrite(RGB_green, LOW);
         digitalWrite(RGB_blue, LOW);
     }
-    while (digitalRead(2)){
+    while (digitalRead(trigger)){
         display.setTextSize(2);
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(2,2);
@@ -84,7 +85,7 @@ void setup(){
 }
 
 void loop(){
-    if (digitalRead(2)){ // Read trigger state
+    if (digitalRead(trigger)){ // Read trigger state
         triggerdown = true;
     }
     else{

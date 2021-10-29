@@ -12,14 +12,14 @@
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-const int safety = 4;
-const int ohterarduino = 5;
-const int volt = A7;
+#define safety 4
+#define ohterarduino 5
+#define volt A7
 
 // Defined RGB control pins (all pins are PWM)
-const int RGB_red = 10;
-const int RGB_green = 11;
-const int RGB_blue = 9;
+#define RGB_red 10
+#define RGB_green 11
+#define RGB_blue 9
 float R_value = 0;
 float G_value = 0;
 float B_value = 0;
@@ -34,7 +34,7 @@ float vin = 0.0;
 float R1 = 98100.0; // resistance of R1 (R15)(100K)
 float R2 = 10607.0; // resistance of R2 (R16)(10K)
 int value = 0; // for calculating Vbat
-const float critvoltage = 22.2;
+#define critvoltage 22.2
 
 // Needed to display safety change
 bool statusmessage = false;
@@ -42,7 +42,7 @@ float timeofstatechange = 0;
 bool safetystate = true;
 bool triggerdown = true;
 
-const int samplecount = 50;
+#define samplecount 50
 float voltagearray [samplecount];
 int currentarray = 0;
 

@@ -60,9 +60,9 @@ void setup(){
         display.setTextSize(2);
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(2,2);
-        display.println("Safety");
+        display.print("Safety");
         display.setCursor(2,16);
-        display.println("Warning!");
+        display.print("Warning!");
         display.display();
         display.clearDisplay();
         digitalWrite(RGB_red, HIGH);
@@ -73,9 +73,9 @@ void setup(){
         display.setTextSize(2);
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(2,2);
-        display.println("Trigger");
+        display.print("Trigger");
         display.setCursor(2,16);
-        display.println("Warning!");
+        display.print("Warning!");
         display.display();
         display.clearDisplay();
         digitalWrite(RGB_red, LOW);
@@ -202,24 +202,28 @@ void loop(){
         display.setTextSize(4); // Draw 3X-scale text
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(2,2);
-        display.println(int(floor(vin)));
-        // display.setCursor()
-        // display.println(".")
-        display.setTextSize(2);
-        display.setCursor(48,16);
-        display.print(int((vin - floor(vin)) * 100));
-
+        if (vin < 10){
+            display.print(vin);
+        }
+        else {
+            display.print(int(floor(vin)));
+            // display.setCursor()
+            // display.print(".")
+            display.setTextSize(2);
+            display.setCursor(48,16);
+            display.print(int((vin - floor(vin)) * 100));
+        }
 
         if (vin < critvoltage and vin != 0.0){
             display.setCursor(100,4);
             display.setTextSize(1);
-            display.println("LOW");
+            display.print("LOW");
         }
 
         if (triggerdown){ // BUG #7 when voltage is >= 10 V (2 primary digits) the LOW and PUK indicators are written over
             display.setCursor(100,16);
             display.setTextSize(1);
-            display.println("PUK"); // Stands for pumped up kicks
+            display.print("PUK"); // Stands for pumped up kicks
         }
     }
     
@@ -229,10 +233,10 @@ void loop(){
         display.setCursor(0,13);
 
         if (digitalRead(safety)){
-            display.println("SAFETY OFF");
+            display.print("SAFETY OFF");
         }
         else if (digitalRead(safety) == LOW){
-            display.println("SAFETY ON");
+            display.print("SAFETY ON");
         }
     }
 
@@ -245,13 +249,13 @@ void loop(){
     // display.setTextSize(1);
     // display.setTextColor(SSD1306_WHITE);
     // display.setCursor(2,2);
-    // display.println(vin); 
+    // display.print(vin); 
     // display.setCursor(2,16);
-    // display.println(int(vin));
+    // display.print(int(vin));
     // display.setCursor(64,2);
-    // display.println(int(floor(vin)));
+    // display.print(int(floor(vin)));
     // display.setCursor(64,16);
-    // display.println(int(ceil(vin)));
+    // display.print(int(ceil(vin)));
 
     Serial.println();
     display.display();

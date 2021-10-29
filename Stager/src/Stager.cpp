@@ -7,20 +7,20 @@ void resetcoil(); // needs to be declared when using .cpp files in VS code, if y
 //I'm just a friendly slime
 
 // Pins to sense the high signal of optical sensors
-const int sensorpin1 = 7; 
-const int sensorpin2 = 8;
-const int sensorpin3 = 9;
-const int sensorpin4 = 10;
-const int sensorpin5 = 11;
-const int sensorpin6 = 12;
+#define sensorpin1 = 7
+#define sensorpin2 = 8
+#define sensorpin3 = 9
+#define sensorpin4 = 10
+#define sensorpin5 = 11
+#define sensorpin6 = 12
 
 // Pins to drive the MOSFETs with
-const int mosfetpin1 = 14;
-const int mosfetpin2 = 15;
-const int mosfetpin3 = 16;
-const int mosfetpin4 = 17;
-const int mosfetpin5 = 18;
-const int mosfetpin6 = 19;
+#define mosfetpin1 = 14
+#define mosfetpin2 = 15
+#define mosfetpin3 = 16
+#define mosfetpin4 = 17
+#define mosfetpin5 = 18
+#define mosfetpin6 = 19
 
 // Software enable/disable for individual coils
 bool allowcoil1 = true;

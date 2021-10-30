@@ -55,6 +55,7 @@ void setup(){
     pinMode(RGB_red, OUTPUT); // Red led logic output for led strip
     pinMode(RGB_green, OUTPUT); // Green led logic output for led strip
     pinMode(RGB_blue, OUTPUT); // Blue led logic output for led strip
+    pinMode(ohterarduino, OUTPUT);
 
     while (digitalRead(safety)){
         display.setTextSize(2);

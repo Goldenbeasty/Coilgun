@@ -245,21 +245,6 @@ void loop(){
     analogWrite(RGB_red, R_value);
     analogWrite(RGB_green, G_value);
     analogWrite(RGB_blue, B_value);
-
-    // DEBUG
-    // display.clearDisplay();
-    // display.setTextSize(1);
-    // display.setTextColor(SSD1306_WHITE);
-    // display.setCursor(2,2);
-    // display.print(vin); 
-    // display.setCursor(2,16);
-    // display.print(int(vin));
-    // display.setCursor(64,2);
-    // display.print(int(floor(vin)));
-    // display.setCursor(64,16);
-    // display.print(int(ceil(vin)));
-
-    Serial.println();
     display.display();
     display.clearDisplay();
 }

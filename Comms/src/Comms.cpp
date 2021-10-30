@@ -15,6 +15,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define safety 4
 #define ohterarduino 5
 #define volt A7
+#define trigger 2
 
 // Defined RGB control pins (all pins are PWM)
 #define RGB_red 10
@@ -47,7 +48,7 @@ float voltagearray [samplecount];
 int currentarray = 0;
 
 void setup(){
-    pinMode(2,INPUT); // Set trigger pin
+    pinMode(trigger ,INPUT); // Set trigger pin
     display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS); //initialize display
     pinMode(safety, INPUT); // Safety switch Normally LOW
     pinMode(volt, INPUT); // Battery voltage level according to the voltage divider
@@ -59,22 +60,22 @@ void setup(){
         display.setTextSize(2);
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(2,2);
-        display.println("Switch");
+        display.print("Safety");
         display.setCursor(2,16);
-        display.println("Warning!");
+        display.print("Warning!");
         display.display();
         display.clearDisplay();
         digitalWrite(RGB_red, HIGH);
         digitalWrite(RGB_green, LOW);
         digitalWrite(RGB_blue, LOW);
     }
-    while (digitalRead(2)){
+    while (digitalRead(trigger)){
         display.setTextSize(2);
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(2,2);
-        display.println("Trigger");
+        display.print("Trigger");
         display.setCursor(2,16);
-        display.println("Warning!");
+        display.print("Warning!");
         display.display();
         display.clearDisplay();
         digitalWrite(RGB_red, LOW);
@@ -84,7 +85,7 @@ void setup(){
 }
 
 void loop(){
-    if (digitalRead(2)){ // Read trigger state
+    if (digitalRead(trigger)){ // Read trigger state
         triggerdown = true;
     }
     else{
@@ -180,7 +181,7 @@ void loop(){
     vout = (value * 5.0) / 1024.0;
     vin = vout / (R2/(R1+R2));
     if (vin<0.9) {
-    vin=0.0; // If no battery is connected don't bother updating with imprecise
+    vin=0.0; // If no battery is connected don't bother updating with imprecise readings
     }
     voltagearray [currentarray] = vin;
     for (int i = 0; i < samplecount; i++){
@@ -201,18 +202,30 @@ void loop(){
         display.setTextSize(4); // Draw 3X-scale text
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(2,2);
-        display.println(vin);
+        if (vin < 10 and vin != 0.00){
+            display.print(vin);
+        }
+        else if (vin == 0.00){
+            display.setTextSize(2);
+            display.print("No bat");
+        }
+        else {
+            display.print(int(floor(vin)));
+            display.setTextSize(2);
+            display.setCursor(48,16);
+            display.print(int((vin - floor(vin)) * 100));
+        }
 
         if (vin < critvoltage and vin != 0.0){
             display.setCursor(100,4);
             display.setTextSize(1);
-            display.println("LOW");
+            display.print("LOW");
         }
 
-        if (triggerdown){ // BUG #7 when voltage is >= 10 V (2 primary digits) the LOW and PUK indicators are written over
+        if (triggerdown){
             display.setCursor(100,16);
             display.setTextSize(1);
-            display.println("PUK"); // Stands for pumped up kicks
+            display.print("PUK"); // Stands for pumped up kicks
         }
     }
     
@@ -222,17 +235,16 @@ void loop(){
         display.setCursor(0,13);
 
         if (digitalRead(safety)){
-            display.println("SAFETY OFF");
+            display.print("SAFETY OFF");
         }
         else if (digitalRead(safety) == LOW){
-            display.println("SAFETY ON");
+            display.print("SAFETY ON");
         }
     }
 
     analogWrite(RGB_red, R_value);
     analogWrite(RGB_green, G_value);
     analogWrite(RGB_blue, B_value);
-    Serial.println();
     display.display();
     display.clearDisplay();
 }

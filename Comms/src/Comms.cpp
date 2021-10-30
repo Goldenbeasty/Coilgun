@@ -202,13 +202,15 @@ void loop(){
         display.setTextSize(4); // Draw 3X-scale text
         display.setTextColor(SSD1306_WHITE);
         display.setCursor(2,2);
-        if (vin < 10){
+        if (vin < 10 and vin != 0.00){
             display.print(vin);
+        }
+        else if (vin == 0.00){
+            display.setTextSize(2);
+            display.print("No bat");
         }
         else {
             display.print(int(floor(vin)));
-            // display.setCursor()
-            // display.print(".")
             display.setTextSize(2);
             display.setCursor(48,16);
             display.print(int((vin - floor(vin)) * 100));
@@ -220,7 +222,7 @@ void loop(){
             display.print("LOW");
         }
 
-        if (triggerdown){ // BUG #7 when voltage is >= 10 V (2 primary digits) the LOW and PUK indicators are written over
+        if (triggerdown){
             display.setCursor(100,16);
             display.setTextSize(1);
             display.print("PUK"); // Stands for pumped up kicks

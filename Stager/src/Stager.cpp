@@ -1,6 +1,7 @@
 #include <Arduino.h>
 
-void resetcoil(); // needs to be declared when using .cpp files in VS code, if you build this in Arduino IDE everithing above line 4 does not need to be included
+// TODO check if code works, if then, remove lines 3,4
+// void resetcoil(); // needs to be declared when using .cpp files in VS code, if you build this in Arduino IDE everithing above line 4 does not need to be included
 
 //I'm just a friendly slime
 
@@ -36,6 +37,15 @@ volatile bool coilhasbeenused3 = true;
 // volatile bool coilhasbeenused5 = true;
 // volatile bool coilhasbeenused6 = true; 
 
+void resetcoil(){
+  coilhasbeenused1 = false;
+  coilhasbeenused2 = false;
+  coilhasbeenused3 = false;
+  // coilhasbeenused4 = false;
+  // coilhasbeenused5 = false;
+  // coilhasbeenused6 = false;
+}
+
 void setup() {
   pinMode(sensorpin1, INPUT);
   pinMode(sensorpin2, INPUT);
@@ -52,15 +62,6 @@ void setup() {
   // pinMode(mosfetpin6, OUTPUT);
 
   attachInterrupt(digitalPinToInterrupt(2),resetcoil,RISING); // Interrupt from the other microcontroller
-}
-
-void resetcoil(){
-  coilhasbeenused1 = false;
-  coilhasbeenused2 = false;
-  coilhasbeenused3 = false;
-  // coilhasbeenused4 = false;
-  // coilhasbeenused5 = false;
-  // coilhasbeenused6 = false;
 }
 
 void loop(){

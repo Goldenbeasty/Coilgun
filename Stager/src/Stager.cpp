@@ -26,9 +26,9 @@ void resetcoil(); // needs to be declared when using .cpp files in VS code, if y
 bool allowcoil1 = true;
 bool allowcoil2 = true;
 bool allowcoil3 = true;
-// bool allowcoil4 = true;
-// bool allowcoil5 = true;
-// bool allowcoil6 = true;
+// bool allowcoil4 = false;
+// bool allowcoil5 = false;
+// bool allowcoil6 = false;
 
 // To make sure that a used coil will not turn back on
 volatile bool coilhasbeenused1 = true;

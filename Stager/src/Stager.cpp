@@ -2,8 +2,6 @@
 
 void resetcoil(); // needs to be declared when using .cpp files in VS code, if you build this in Arduino IDE everithing above line 4 does not need to be included
 
-// By default hasfired bool will be set to true and only will be enabled right before activating coils 1 & 2
-
 //I'm just a friendly slime
 
 // Pins to sense the high signal of optical sensors
@@ -22,13 +20,13 @@ void resetcoil(); // needs to be declared when using .cpp files in VS code, if y
 #define mosfetpin5 18
 #define mosfetpin6 19
 
-// Software enable/disable for individual coils
-bool allowcoil1 = true;
-bool allowcoil2 = true;
-bool allowcoil3 = true;
-// bool allowcoil4 = false;
-// bool allowcoil5 = false;
-// bool allowcoil6 = false;
+// Software enable/disable for individual coils, could be done on compiler level
+#define allowcoil1 true
+#define allowcoil2 true
+#define allowcoil3 true
+// #define allowcoil4 false
+// #define allowcoil5 false
+// #define allowcoil6 false
 
 // To make sure that a used coil will not turn back on
 volatile bool coilhasbeenused1 = true;
@@ -38,7 +36,7 @@ volatile bool coilhasbeenused3 = true;
 // volatile bool coilhasbeenused5 = true;
 // volatile bool coilhasbeenused6 = true; 
 
-void setup() {// just the setup to assign pinmodes // probably can be done more easly, but I don't care, just keep it simple
+void setup() {
   pinMode(sensorpin1, INPUT);
   pinMode(sensorpin2, INPUT);
   pinMode(sensorpin3, INPUT);
@@ -56,7 +54,7 @@ void setup() {// just the setup to assign pinmodes // probably can be done more 
   attachInterrupt(digitalPinToInterrupt(2),resetcoil,RISING); // Interrupt from the other microcontroller
 }
 
-void resetcoil(){ // Enables coils for fireing
+void resetcoil(){
   coilhasbeenused1 = false;
   coilhasbeenused2 = false;
   coilhasbeenused3 = false;
@@ -65,7 +63,7 @@ void resetcoil(){ // Enables coils for fireing
   // coilhasbeenused6 = false;
 }
 
-void loop(){ // Currently takes around 60 microseconds to loop, probably can be optimized, if you want you can write it in assembely language if you wish so :)
+void loop(){
   if (coilhasbeenused1 == false and allowcoil1 and digitalRead(sensorpin1) == LOW){ // Checks if the coil is allowed to work, if the sensor is clear, if the bullet has already passed
     digitalWrite(mosfetpin1, HIGH);
   }
@@ -74,7 +72,7 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
     coilhasbeenused1 = true;
   }
   
-  if (coilhasbeenused2 == false and allowcoil2 and digitalRead(sensorpin2) == LOW and coilhasbeenused1){
+  if (coilhasbeenused2 == false and allowcoil2 and coilhasbeenused1 and digitalRead(sensorpin2) == LOW){
     digitalWrite(mosfetpin2, HIGH);
   }
   else{
@@ -84,7 +82,7 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
     }
   }
 
-  if (coilhasbeenused3 == false and coilhasbeenused1 and allowcoil3 and digitalRead(sensorpin3) == LOW){ // Checks if the coil is allowed to work, if the sensor is clear, if the bullet has passed it's coil and if the bullet has passed two coils prior
+  if (coilhasbeenused3 == false and allowcoil3 and coilhasbeenused1 and coilhasbeenused2 and digitalRead(sensorpin3) == LOW){
     digitalWrite(mosfetpin3,HIGH);
   } 
   else{
@@ -93,52 +91,4 @@ void loop(){ // Currently takes around 60 microseconds to loop, probably can be 
       coilhasbeenused3 = true;
     }
   }
-  
-  // if (coilhasbeenused4 == false){ // Same as coil 3
-  //   if (coilhasbeenused2){
-  //     if (allowcoil4){
-  //       if (digitalRead(sensorpin4) == LOW){
-  //         digitalWrite(mosfetpin4, HIGH);
-  //       }
-  //     }
-  //   }
-  // }
-  // else{
-  //   digitalWrite(mosfetpin4, LOW);
-  //   if (coilhasbeenused2){
-  //     coilhasbeenused4 = true;
-  //   }
-  // }
-
-  // if (coilhasbeenused5 == false){ // Same as coil 3
-  //   if (coilhasbeenused3){
-  //     if (allowcoil5){
-  //       if (digitalRead(sensorpin5) == LOW){
-  //         digitalWrite(mosfetpin5, HIGH);
-  //       }
-  //     }
-  //   }
-  // }
-  // else{
-  //   digitalWrite(mosfetpin5,LOW);
-  //   if (coilhasbeenused3 == false){
-  //     coilhasbeenused5 = true;
-  //   }
-  // }
-
-  // if (coilhasbeenused6 == false){ // Same as coil 3
-  //   if (coilhasbeenused4){
-  //     if (allowcoil6){
-  //       if (digitalRead(sensorpin6) == LOW){
-  //         digitalWrite(mosfetpin6,HIGH);
-  //       }
-  //     }
-  //   }
-  // }
-  // else{
-  //   digitalWrite(mosfetpin6, LOW);
-  //   if (coilhasbeenused4){
-  //     coilhasbeenused6 = true;
-  //   }
-  // }
 }

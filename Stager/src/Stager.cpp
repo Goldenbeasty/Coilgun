@@ -28,6 +28,8 @@ void resetcoil(); // needs to be declared when using .cpp files in VS code, if y
 // #define allowcoil5 false
 // #define allowcoil6 false
 
+volatile long watchdogbreak = 0;
+#define watchdogtime 2000 // in ms
 // To make sure that a used coil will not turn back on
 volatile bool coilhasbeenused1 = true;
 volatile bool coilhasbeenused2 = true;
@@ -55,6 +57,7 @@ void setup() {
 }
 
 void resetcoil(){
+  watchdogbreak = millis() + watchdogtime;
   coilhasbeenused1 = false;
   coilhasbeenused2 = false;
   coilhasbeenused3 = false;
@@ -64,6 +67,12 @@ void resetcoil(){
 }
 
 void loop(){
+  if (millis() >= watchdogbreak){
+    coilhasbeenused1 = true;
+    coilhasbeenused2 = true;
+    coilhasbeenused3 = true;
+  }
+  
   if (coilhasbeenused1 == false and allowcoil1 and digitalRead(sensorpin1) == LOW){ // Checks if the coil is allowed to work, if the sensor is clear, if the bullet has already passed
     digitalWrite(mosfetpin1, HIGH);
   }
@@ -84,7 +93,7 @@ void loop(){
 
   if (coilhasbeenused3 == false and allowcoil3 and coilhasbeenused1 and coilhasbeenused2 and digitalRead(sensorpin3) == LOW){
     digitalWrite(mosfetpin3,HIGH);
-  } 
+  }
   else{
     digitalWrite(mosfetpin3, LOW);
     if (coilhasbeenused2){

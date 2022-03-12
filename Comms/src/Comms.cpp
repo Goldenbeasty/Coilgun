@@ -4,7 +4,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-void updatehue(); // TODO check if needed
+// void updatehue(); // TODO check if needed
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 32 // OLED display height, in pixels
@@ -49,36 +49,37 @@ bool triggerdown = true;
 float voltagearray [samplecount];
 int currentarray = 0;
 
-void updatehue(){ // TODO determin if any of given variables need to be declared volatile
-  if (dohuechange){ // Somehow the most difficult part of writing this code
-    hue = (millis() - time_of_last_hue_reset) * 360 / huecycle_time; // Calculates current hue based on time passed since last hue reset
+void updatehue(){ // TODO determin if any of given variables need to be declared volatile // Somehow the most difficult part of writing this code
+  hue = (millis() - time_of_last_hue_reset) * 360 / huecycle_time; // Calculates current hue based on time passed since last hue reset
 
-    if (0 < hue and hue <= 60){
-      G_value = hue * 4.25;
-    }
-    if (60 < hue and hue <= 120){
-      R_value = 255 - ((hue - 60) * 4.25);
-    }
-    if (120 < hue and hue <= 180){
-      B_value = (hue - 120) * 4.25;
-    }
-    if (180 < hue and hue <= 240){
-      G_value = 255 - ((hue - 180) * 4.25);
-    }
-    if (240 < hue and hue <= 300){
-      R_value = (hue - 240) * 4.25;
-    }
-    if (300 < hue and hue <= 360){
-      B_value = 255 - ((hue - 300) * 4.25);
-    }
-    if (hue > 360){
-      time_of_last_hue_reset = millis(); // timer reset
-
-      R_value = 255; // For some reason needed to make it loop nicely
-      G_value = 0;
-      B_value = 0;
-    }
+  if (0 < hue and hue <= 60){
+    G_value = hue * 4.25;
   }
+  if (60 < hue and hue <= 120){
+    R_value = 255 - ((hue - 60) * 4.25);
+  }
+  if (120 < hue and hue <= 180){
+    B_value = (hue - 120) * 4.25;
+  }
+  if (180 < hue and hue <= 240){
+    G_value = 255 - ((hue - 180) * 4.25);
+  }
+  if (240 < hue and hue <= 300){
+    R_value = (hue - 240) * 4.25;
+  }
+  if (300 < hue and hue <= 360){
+    B_value = 255 - ((hue - 300) * 4.25);
+  }
+  if (hue > 360){
+    time_of_last_hue_reset = millis(); // timer reset
+
+    R_value = 255; // For some reason needed to make it loop nicely
+    G_value = 0;
+    B_value = 0;
+  }
+  analogWrite(RGB_red, R_value);
+  analogWrite(RGB_green, G_value);
+  analogWrite(RGB_blue, B_value);
 }
 
 void setup(){
@@ -116,6 +117,15 @@ void setup(){
     digitalWrite(RGB_red, LOW);
     digitalWrite(RGB_green, LOW);
     digitalWrite(RGB_blue, HIGH);
+  }
+
+  OCR0A = 0xAF; // some timer0 magic
+  TIMSK0 |= _BV(OCIE0A);
+}
+
+SIGNAL(TIMER0_COMPA_vect){
+  if (dohuechange){
+    updatehue();
   }
 }
 
@@ -181,8 +191,6 @@ void loop(){
 
     safetystate = true;
   }
-
-  updatehue();
 
   value = analogRead(volt); // read the value at analog input
   vout = (value * 5.0) / 1024.0;

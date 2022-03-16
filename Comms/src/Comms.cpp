@@ -4,8 +4,6 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-// void updatehue(); // TODO check if needed
-
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 32 // OLED display height, in pixels
 

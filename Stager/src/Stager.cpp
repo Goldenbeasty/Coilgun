@@ -1,7 +1,5 @@
 #include <Arduino.h>
 
-void resetcoil(); // needs to be declared when using .cpp files in VS code, if you build this in Arduino IDE everithing above line 4 does not need to be included
-
 //I'm just a friendly slime
 
 // Pins to sense the high signal of optical sensors
@@ -24,43 +22,28 @@ void resetcoil(); // needs to be declared when using .cpp files in VS code, if y
 #define allowcoil1 true
 #define allowcoil2 true
 #define allowcoil3 true
-// #define allowcoil4 false
-// #define allowcoil5 false
-// #define allowcoil6 false
 
 // To make sure that a used coil will not turn back on
 volatile bool coilhasbeenused1 = true;
 volatile bool coilhasbeenused2 = true;
 volatile bool coilhasbeenused3 = true;
-// volatile bool coilhasbeenused4 = true;
-// volatile bool coilhasbeenused5 = true;
-// volatile bool coilhasbeenused6 = true; 
-
-void setup() {
-  pinMode(sensorpin1, INPUT);
-  pinMode(sensorpin2, INPUT);
-  pinMode(sensorpin3, INPUT);
-  // pinMode(sensorpin4, INPUT);
-  // pinMode(sensorpin5, INPUT);
-  // pinMode(sensorpin6, INPUT);
-
-  pinMode(mosfetpin1, OUTPUT);
-  pinMode(mosfetpin2, OUTPUT);
-  pinMode(mosfetpin3, OUTPUT);
-  // pinMode(mosfetpin4, OUTPUT);
-  // pinMode(mosfetpin5, OUTPUT);
-  // pinMode(mosfetpin6, OUTPUT);
-
-  attachInterrupt(digitalPinToInterrupt(2),resetcoil,RISING); // Interrupt from the other microcontroller
-}
 
 void resetcoil(){
   coilhasbeenused1 = false;
   coilhasbeenused2 = false;
   coilhasbeenused3 = false;
-  // coilhasbeenused4 = false;
-  // coilhasbeenused5 = false;
-  // coilhasbeenused6 = false;
+}
+
+void setup() {
+  pinMode(sensorpin1, INPUT);
+  pinMode(sensorpin2, INPUT);
+  pinMode(sensorpin3, INPUT);
+
+  pinMode(mosfetpin1, OUTPUT);
+  pinMode(mosfetpin2, OUTPUT);
+  pinMode(mosfetpin3, OUTPUT);
+
+  attachInterrupt(digitalPinToInterrupt(2),resetcoil,RISING); // Interrupt from the other microcontroller
 }
 
 void loop(){

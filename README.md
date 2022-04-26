@@ -29,6 +29,8 @@ Install the PlatformIO extention from the marketplace for VScode: Instructions [
 
 Open the directory `Comms` in VS code and press `Ctrl + Alt + B` to build the project and `Ctrl + Alt + U` to upload to the Arduino.
 
+Do the same for `Stager`.
+
 ### Alternatively using ArduinoIDE
 
 Open the files `Comms.cpp` and `Stager.cpp` in ArduinoIDE and install the libraries. Then upload the code to the Arduino.

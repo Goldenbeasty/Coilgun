@@ -32,8 +32,8 @@ float time_of_last_hue_reset = 0;
 // Needed to calculate the battery voltage
 float vout = 0.0;
 float vin = 0.0;
-float R1 = 98100.0; // resistance of R1 (R15)(100K)
-float R2 = 10607.0; // resistance of R2 (R16)(10K)
+#define R1 98100.0 // resistance of R1 (R15)(100K)
+#define R2 10607.0 // resistance of R2 (R16)(10K)
 int value = 0; // for calculating Vbat
 #define critvoltage 22.2
 
